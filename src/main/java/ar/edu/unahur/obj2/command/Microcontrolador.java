@@ -4,12 +4,12 @@ import java.util.List;
 
 import ar.edu.unahur.obj2.command.comandos.Operable;
 
-public class Microprocesador implements Programable{
+public class Microcontrolador implements Programable{
     private Integer acumuladorA;
     private Integer acumuladorB;
     private Integer programCounter;
 
-    public Microprocesador(Integer acumuladorA, Integer acumuladorB, Integer programCounter){
+    public Microcontrolador(Integer acumuladorA, Integer acumuladorB, Integer programCounter){
         this.acumuladorA = acumuladorA;
         this.acumuladorB = acumuladorB;
         this.programCounter = programCounter;
