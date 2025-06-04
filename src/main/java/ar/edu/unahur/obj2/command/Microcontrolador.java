@@ -4,18 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unahur.obj2.command.comandos.Operable;
+import ar.edu.unahur.obj2.command.excepctions.MicroException;
 
 public class Microcontrolador implements Programable{
-    private Integer acumuladorA;
-    private Integer acumuladorB;
-    private Integer programCounter;
-    private List<Integer> addr = new ArrayList<>();
-
-    public Microcontrolador(Integer acumuladorA, Integer acumuladorB, Integer programCounter){
-        this.acumuladorA = acumuladorA;
-        this.acumuladorB = acumuladorB;
-        this.programCounter = programCounter;
-    }
+    private Integer acumuladorA = 0;
+    private Integer acumuladorB = 0;
+    private Integer programCounter = 0;
+    private List<Integer> memoriaDeDatos = new ArrayList<>();
 
     @Override
     public void run(List<Operable> operaciones) {
@@ -59,24 +54,31 @@ public class Microcontrolador implements Programable{
 
     @Override
     public Programable copy() {
-
+        return this;
+        //No se
     }
 
     @Override
     public void reset() {
-
+        acumuladorA = 0;
+        acumuladorB = 0;
+        programCounter = 0;
     }
 
     @Override
     public void setAddr(Integer addr) {
-        if(addr >= 0 || addr <= 1023){
-            this.addr.add(addr);
+        if(memoriaDeDatos.size() > 1023){
+            new MicroException("Fuera del espacio de memoria");
         }
+        memoriaDeDatos.add(addr);
     }
 
     @Override
     public Integer getAddr(Integer addr) {
-        return this.addr.get(addr);
+        if(!(addr >= 0 || addr <= 1023)){
+            new MicroException("Fuera del espacio de memoria");
+        }
+        return memoriaDeDatos.get(addr);
     }
 
 }
