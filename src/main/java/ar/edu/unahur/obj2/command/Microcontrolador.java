@@ -1,5 +1,6 @@
 package ar.edu.unahur.obj2.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unahur.obj2.command.comandos.Operable;
@@ -8,6 +9,7 @@ public class Microcontrolador implements Programable{
     private Integer acumuladorA;
     private Integer acumuladorB;
     private Integer programCounter;
+    private List<Integer> addr = new ArrayList<>();
 
     public Microcontrolador(Integer acumuladorA, Integer acumuladorB, Integer programCounter){
         this.acumuladorA = acumuladorA;
@@ -17,7 +19,7 @@ public class Microcontrolador implements Programable{
 
     @Override
     public void run(List<Operable> operaciones) {
-
+        operaciones.forEach(o -> o.execute(this));
     }
 
     @Override
@@ -67,12 +69,14 @@ public class Microcontrolador implements Programable{
 
     @Override
     public void setAddr(Integer addr) {
-
+        if(addr >= 0 || addr <= 1023){
+            this.addr.add(addr);
+        }
     }
 
     @Override
     public Integer getAddr(Integer addr) {
-
+        return this.addr.get(addr);
     }
 
 }
