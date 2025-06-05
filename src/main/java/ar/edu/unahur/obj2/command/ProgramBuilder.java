@@ -13,6 +13,11 @@ import ar.edu.unahur.obj2.command.comandos.Swap;
 
 public class ProgramBuilder {
     private List<Operable> programa = new ArrayList<>();
+    private Programable micro;
+
+    public ProgramBuilder(Programable micro){
+        this.micro = micro;
+    }
 
     public List<Operable> getPrograma(){
         return programa;
@@ -38,11 +43,19 @@ public class ProgramBuilder {
         programa.add(new Lodv(val));
     }
 
-    public void str(){
-        programa.add(new Str());
+    public void str(Integer addr){
+        programa.add(new Str(addr));
     }
 
     public void swap(){
         programa.add(new Swap());
+    }
+
+    public void run(){
+        micro.run(programa);
+    }
+
+    public void undoLast(){
+        programa.getLast().undo(micro);
     }
 }

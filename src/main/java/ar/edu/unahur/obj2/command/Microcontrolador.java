@@ -1,17 +1,23 @@
 package ar.edu.unahur.obj2.command;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ar.edu.unahur.obj2.command.comandos.Operable;
-import ar.edu.unahur.obj2.command.excepctions.MicroException;
 
 public class Microcontrolador implements Programable{
     private Integer acumuladorA = 0;
     private Integer acumuladorB = 0;
     private Integer programCounter = 0;
-    private List<Integer> memoriaDeDatos = new ArrayList<>();
-
+    private Integer[] memoriaDeDatos = new Integer[1024];
+    private HashMap<Character, Integer> lastInstruccions = new HashMap<>();
+    
+    public Microcontrolador(){
+        lastInstruccions.put('a', acumuladorA);
+        lastInstruccions.put('b', acumuladorB);
+        lastInstruccions.put('c', programCounter);
+    }
+    
     @Override
     public void run(List<Operable> operaciones) {
         operaciones.forEach(o -> o.execute(this));
@@ -19,6 +25,7 @@ public class Microcontrolador implements Programable{
 
     @Override
     public void incProgramCounter() {
+        lastInstruccions.put('c', programCounter);
         programCounter++;
     }
 
@@ -29,6 +36,7 @@ public class Microcontrolador implements Programable{
 
     @Override
     public void setAcumuladorA(Integer value) {
+        lastInstruccions.put('a', acumuladorA);
         acumuladorA = value;
     }
 
@@ -39,6 +47,7 @@ public class Microcontrolador implements Programable{
 
     @Override
     public void setAcumuladorB(Integer value) {
+        lastInstruccions.put('b', acumuladorB);
         acumuladorB = value;
     }
 
@@ -67,18 +76,28 @@ public class Microcontrolador implements Programable{
 
     @Override
     public void setAddr(Integer addr) {
-        if(memoriaDeDatos.size() > 1023){
-            new MicroException("Fuera del espacio de memoria");
-        }
-        memoriaDeDatos.add(addr);
+        memoriaDeDatos[addr] = acumuladorA;
     }
 
     @Override
     public Integer getAddr(Integer addr) {
-        if(!(addr >= 0 || addr <= 1023)){
-            new MicroException("Fuera del espacio de memoria");
-        }
-        return memoriaDeDatos.get(addr);
+        return memoriaDeDatos[addr];
     }
+
+    @Override
+    public void undoAcumuladorA() {
+        acumuladorA = lastInstruccions.get('a');
+    }
+
+    @Override
+    public void undoAcumuladorB() {
+        acumuladorB = lastInstruccions.get('b');
+    }
+
+    @Override
+    public void undoProgramCounter() {
+        programCounter = lastInstruccions.get('c');
+    }
+    
 
 }

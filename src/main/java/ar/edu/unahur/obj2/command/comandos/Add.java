@@ -15,7 +15,9 @@ public class Add implements Operable{
 
     @Override
     public void undo(Programable micro) {
-        //...
+        micro.undoProgramCounter();
+        micro.undoAcumuladorA();
+        micro.undoAcumuladorB();
     }
 
 }

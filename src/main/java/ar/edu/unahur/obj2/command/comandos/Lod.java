@@ -18,7 +18,8 @@ public class Lod implements Operable{
 
     @Override
     public void undo(Programable micro) {
-       
+       micro.undoProgramCounter();
+       micro.undoAcumuladorA();
     }
 
 }

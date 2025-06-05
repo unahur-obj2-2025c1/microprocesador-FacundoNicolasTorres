@@ -17,7 +17,8 @@ public class Lodv implements Operable{
 
     @Override
     public void undo(Programable micro) {
-       
+       micro.incProgramCounter();
+       micro.undoAcumuladorA();
     }
 
 }

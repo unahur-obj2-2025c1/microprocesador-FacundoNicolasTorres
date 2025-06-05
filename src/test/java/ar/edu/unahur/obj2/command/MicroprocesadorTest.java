@@ -1,7 +1,6 @@
 package ar.edu.unahur.obj2.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +8,8 @@ import org.junit.jupiter.api.Test;
 
 public class MicroprocesadorTest {
     private Programable micro = new Microcontrolador();
-    private ProgramBuilder programa = new ProgramBuilder();
+    private ProgramBuilder programa = new ProgramBuilder(micro);
+    
     @BeforeEach
     void setUp(){
         micro.reset();
@@ -22,7 +22,7 @@ public class MicroprocesadorTest {
         programa.nop();
         programa.nop();
         programa.nop();
-        micro.run(programa.getPrograma());
+        programa.run();
 
         assertEquals(3, micro.getProgramCounter());
     }
@@ -33,7 +33,7 @@ public class MicroprocesadorTest {
         programa.swap();
         programa.lodv(17);
         programa.add();
-        micro.run(programa.getPrograma());
+        programa.run();
 
         assertEquals(37, micro.getAcumuladorA());
         assertEquals(0, micro.getAcumuladorB());
@@ -43,7 +43,7 @@ public class MicroprocesadorTest {
     @Test
     void programaQueSumaTresNumeros_GuardandoUnDatoEnLaMemoriaDeDatosYSumandoCorrectamente(){
         programa.lodv(2);
-        programa.str();
+        programa.str(0);
         programa.lodv(8);
         programa.swap();
         programa.lodv(5);
@@ -52,9 +52,11 @@ public class MicroprocesadorTest {
         programa.lod(0);
         programa.add();
 
-        micro.run(programa.getPrograma());
+        programa.run();
 
         assertEquals(15, micro.getAcumuladorA());
         assertEquals(0, micro.getAcumuladorB());
+        assertEquals(9, micro.getProgramCounter());
     }
+
 }
