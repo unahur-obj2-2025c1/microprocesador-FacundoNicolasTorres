@@ -3,22 +3,24 @@ package ar.edu.unahur.obj2.command.comandos;
 import ar.edu.unahur.obj2.command.Programable;
 
 public class Swap implements Operable{
+    private Integer anteriorA;
+    private Integer anteriorB;
 
     @Override
     public void execute(Programable micro) {
-        Integer valorA = micro.getAcumuladorA();
-        Integer valorB = micro.getAcumuladorB();
+        anteriorA = micro.getAcumuladorA();
+        anteriorB = micro.getAcumuladorB();
         
         micro.incProgramCounter();
-        micro.setAcumuladorA(valorB);
-        micro.setAcumuladorB(valorA);
+        micro.setAcumuladorA(anteriorB);
+        micro.setAcumuladorB(anteriorA);
     }
 
     @Override
     public void undo(Programable micro) {
-       micro.undoProgramCounter();
-       micro.undoAcumuladorA();
-       micro.undoAcumuladorB();
+        micro.decProgramCounter();
+        micro.setAcumuladorA(anteriorA);
+        micro.setAcumuladorB(anteriorB);
     }
 
 }

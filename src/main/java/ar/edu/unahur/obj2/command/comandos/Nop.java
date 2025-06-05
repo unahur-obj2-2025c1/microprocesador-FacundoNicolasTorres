@@ -11,7 +11,7 @@ public class Nop implements Operable{
 
     @Override
     public void undo(Programable micro) {
-        micro.undoProgramCounter();
+        micro.decProgramCounter();
     }
 
 }

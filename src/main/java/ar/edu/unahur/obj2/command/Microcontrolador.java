@@ -1,7 +1,7 @@
 package ar.edu.unahur.obj2.command;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 import ar.edu.unahur.obj2.command.comandos.Operable;
 
@@ -10,25 +10,31 @@ public class Microcontrolador implements Programable{
     private Integer acumuladorB = 0;
     private Integer programCounter = 0;
     private Integer[] memoriaDeDatos = new Integer[1024];
-    private HashMap<Character, Integer> lastInstruccions = new HashMap<>();
-    
-    public Microcontrolador(){
-        lastInstruccions.put('a', acumuladorA);
-        lastInstruccions.put('b', acumuladorB);
-        lastInstruccions.put('c', programCounter);
-    }
+    private Stack<Operable> lastInstructions = new Stack<>();
     
     @Override
     public void run(List<Operable> operaciones) {
-        operaciones.forEach(o -> o.execute(this));
+        operaciones.forEach(o -> {
+            o.execute(this);
+            lastInstructions.push(o);
+        }
+        );
     }
 
+    public void undoLast(){
+        lastInstructions.pop().undo(this);
+    }
+    
     @Override
     public void incProgramCounter() {
-        lastInstruccions.put('c', programCounter);
         programCounter++;
     }
-
+    
+    @Override
+    public void decProgramCounter() {
+        programCounter--;
+    }
+    
     @Override
     public Integer getProgramCounter() {
         return programCounter;
@@ -36,7 +42,6 @@ public class Microcontrolador implements Programable{
 
     @Override
     public void setAcumuladorA(Integer value) {
-        lastInstruccions.put('a', acumuladorA);
         acumuladorA = value;
     }
 
@@ -47,7 +52,6 @@ public class Microcontrolador implements Programable{
 
     @Override
     public void setAcumuladorB(Integer value) {
-        lastInstruccions.put('b', acumuladorB);
         acumuladorB = value;
     }
 
@@ -83,21 +87,5 @@ public class Microcontrolador implements Programable{
     public Integer getAddr(Integer addr) {
         return memoriaDeDatos[addr];
     }
-
-    @Override
-    public void undoAcumuladorA() {
-        acumuladorA = lastInstruccions.get('a');
-    }
-
-    @Override
-    public void undoAcumuladorB() {
-        acumuladorB = lastInstruccions.get('b');
-    }
-
-    @Override
-    public void undoProgramCounter() {
-        programCounter = lastInstruccions.get('c');
-    }
-    
 
 }

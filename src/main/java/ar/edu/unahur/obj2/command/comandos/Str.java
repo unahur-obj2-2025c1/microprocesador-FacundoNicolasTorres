@@ -4,6 +4,7 @@ import ar.edu.unahur.obj2.command.Programable;
 
 public class Str implements Operable{
     private Integer addr;
+    private Integer addrAnterior;
 
     public Str(Integer addr){
         this.addr = addr;
@@ -21,7 +22,7 @@ public class Str implements Operable{
 
     @Override
     public void undo(Programable micro) {
-        micro.undoProgramCounter();
+        micro.decProgramCounter();
     }
 
 }

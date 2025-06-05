@@ -8,13 +8,9 @@ public interface Programable {
 
     void run(List<Operable> operaciones);
 
-    void undoAcumuladorA();
-
-    void undoAcumuladorB();
-
-    void undoProgramCounter();
-
     void incProgramCounter();
+
+    void decProgramCounter();
 
     Integer getProgramCounter();
 
