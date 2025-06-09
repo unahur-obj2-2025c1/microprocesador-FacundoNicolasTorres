@@ -16,6 +16,7 @@ public class Whnz implements Operable{
 
     @Override
     public void execute(Programable micro) {
+        micro.incProgramCounter();
         while(micro.getAcumuladorA() != 0){
             vecesEjecutada++;
             instrucciones.forEach(o -> o.execute(micro));

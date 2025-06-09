@@ -22,6 +22,7 @@ public class MicroprocesadorTest {
         programa.nop();
         programa.nop();
         programa.nop();
+
         programa.run();
 
         assertEquals(3, micro.getProgramCounter());
@@ -33,6 +34,7 @@ public class MicroprocesadorTest {
         programa.swap();
         programa.lodv(17);
         programa.add();
+
         programa.run();
 
         assertEquals(37, micro.getAcumuladorA());
@@ -57,6 +59,82 @@ public class MicroprocesadorTest {
         assertEquals(15, micro.getAcumuladorA());
         assertEquals(0, micro.getAcumuladorB());
         assertEquals(9, micro.getProgramCounter());
+    }
+
+    @Test
+    void programaConLaInstruccionIfnzSeLeHaceUndoYVuelveAlValoranteriorDelPrograma(){
+        ProgramBuilder prog2 = new ProgramBuilder(micro);
+
+        programa.lodv(2);
+        
+        prog2.str(0);
+        prog2.lodv(8);
+        prog2.swap();
+        prog2.nop();
+        prog2.lodv(5);
+        prog2.add();
+        prog2.swap();
+        prog2.lod(0);
+        prog2.add();
+
+        programa.ifnz(prog2.getPrograma());
+
+        programa.run();
+        programa.undoLast();
+
+        assertEquals(2, micro.getAcumuladorA());
+        assertEquals(0, micro.getAcumuladorB());
+        assertEquals(1, micro.getProgramCounter());
+    }
+
+    @Test
+    void programaConInstruccionWhnz_SeHaceUndoYVuelveAlEstadoAnteriorDelPrograma(){
+        ProgramBuilder prog2 = new ProgramBuilder(micro);
+
+        programa.lodv(2);
+
+        prog2.str(0);
+        prog2.lodv(8);
+        prog2.swap();
+        prog2.nop();
+        prog2.lodv(5);
+        prog2.add();
+        prog2.str(1);
+        prog2.lodv(0);
+
+        programa.whnz(prog2.getPrograma());
+
+        programa.run();
+        programa.undoLast();
+
+        assertEquals(2, micro.getAcumuladorA());
+        assertEquals(0, micro.getAcumuladorB());
+        assertEquals(1, micro.getProgramCounter());
+    }
+
+    @Test
+    void programaConIfnzEmpiezaConElAcumuladorAEn0_YNoHaceNada(){
+        ProgramBuilder prog2 = new ProgramBuilder(micro);
+
+        prog2.lodv(2);
+        prog2.str(0);
+        prog2.lodv(8);
+        prog2.swap();
+        prog2.nop();
+        prog2.lodv(5);
+        prog2.add();
+        prog2.swap();
+        prog2.lod(0);
+        prog2.add();
+
+        programa.ifnz(prog2.getPrograma());
+
+        programa.run();
+        programa.undoLast();
+
+        assertEquals(0, micro.getAcumuladorA());
+        assertEquals(0, micro.getAcumuladorB());
+        assertEquals(0, micro.getProgramCounter());
     }
 
 }

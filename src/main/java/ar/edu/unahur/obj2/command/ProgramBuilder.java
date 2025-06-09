@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unahur.obj2.command.comandos.Add;
+import ar.edu.unahur.obj2.command.comandos.Ifnz;
 import ar.edu.unahur.obj2.command.comandos.Lod;
 import ar.edu.unahur.obj2.command.comandos.Lodv;
 import ar.edu.unahur.obj2.command.comandos.Nop;
 import ar.edu.unahur.obj2.command.comandos.Operable;
 import ar.edu.unahur.obj2.command.comandos.Str;
 import ar.edu.unahur.obj2.command.comandos.Swap;
+import ar.edu.unahur.obj2.command.comandos.Whnz;
 
 public class ProgramBuilder {
     private List<Operable> programa = new ArrayList<>();
@@ -56,6 +58,14 @@ public class ProgramBuilder {
     }
 
     public void undoLast(){
-        programa.getLast().undo(micro);
+        micro.undoLast();
+    }
+
+    public void ifnz(List<Operable> prog){
+        programa.add(new Ifnz(prog));
+    }
+
+    public void whnz(List<Operable> prog){
+        programa.add(new Whnz(prog));
     }
 }
